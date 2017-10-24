@@ -13,6 +13,7 @@ public class LogServer {
 	
 	private LogThread getThreadFor(String fileName){
 		//TODO
+		return new LogThread();
 	}
 	
 	public void registerClient() {
