@@ -5,10 +5,10 @@ import java.util.Date;
 public class LogMessage {
 	private LogLevel level;
 	private String message;
-	private LogClient client;
+	private String client;
 	private Date date;
 
-	public LogMessage(LogLevel level, String message, LogClient client, Date date) {
+	public LogMessage(LogLevel level, String message, String client, Date date) {
 		this.level = level;
 		this.message = message;
 		this.client = client;
@@ -31,11 +31,11 @@ public class LogMessage {
 		this.message = message;
 	}
 
-	public LogClient getClient() {
+	public String getClient() {
 		return client;
 	}
 
-	public void setClient(LogClient client) {
+	public void setClient(String client) {
 		this.client = client;
 	}
 
