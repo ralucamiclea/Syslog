@@ -19,6 +19,11 @@ public class LogServer {
 		config = LogServerConfig.getConfig();
 	}
 	
+	/*Stops all threads.*/
+	public void stop(){
+		threads.forEach( (k,v) -> v.stop());
+	}
+	
 	/*Adds a new client to the list as long as the max number of clients
 	 * is smaller than the one set in the config file. Upon success it
 	 * returns true, otherwise it returns false.*/
@@ -66,6 +71,7 @@ public class LogServer {
 		
 		if(thread == null){ //key might not exists or value might be null
 			thread = new LogThread(fileName);
+			thread.start();
 			threads.put(fileName, thread); //put a value in that key
 		}
 		
