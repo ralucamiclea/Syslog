@@ -14,4 +14,8 @@ public class LogServerConfig {
 	public static LogServerConfig getConfig() {
 		return new LogServerConfig();
 	}
+	
+	public int getMaxClients() {
+		return maxClients;
+	}
 }
