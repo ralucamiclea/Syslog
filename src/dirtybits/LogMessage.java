@@ -19,10 +19,6 @@ public class LogMessage {
 		return level;
 	}
 
-	public void setLevel(LogLevel level) {
-		this.level = level;
-	}
-
 	public String getMessage() {
 		return message;
 	}
@@ -42,10 +38,4 @@ public class LogMessage {
 	public Date getDate() {
 		return date;
 	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	
-	
 }
