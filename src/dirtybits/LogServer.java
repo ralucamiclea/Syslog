@@ -16,7 +16,7 @@ public class LogServer {
 	public LogServer() {
 		threads = new HashMap<String,LogThread>();
 		clients = new ArrayList<LogClient>();
-		config = new LogServerConfig();
+		config = LogServerConfig.getConfig();
 	}
 	
 	/*Adds a new client to the list as long as the max number of clients
@@ -36,17 +36,17 @@ public class LogServer {
 	 * */
 	public boolean registerLog(LogClient client, LogMessage log) {
 		if(!clientExists(client))
-			return false;
+			return false; //client does not exist
 		
 		String filename;
 		try {
 			filename = Auxiliary.getFileName(config, log);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return false;
+			return false; //could not create fileName
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
+			return false; //could not create fileName
 		}
 		LogThread thread = getThreadFor(filename);
 		
@@ -58,15 +58,18 @@ public class LogServer {
 		return true;
 	}
 	
+	/*Looks for corresponding thread in the HashMap.
+	 * Returns the thread associated with a particular fileName.
+	 * If the thread doesn't exist, it creates one.*/
 	private LogThread getThreadFor(String fileName){
-		//TODO: search for the corresponding thread in the HashMap
-		//if the thread doesn't exist, create it;
-		return new LogThread();
-	}
-	
-	private LogThread addThreadFor(String fileName){
-		//TODO: create a new thread for the corresponding fileName
-		return new LogThread();
+		LogThread thread = threads.get(fileName);
+		
+		if(thread == null){ //key might not exists or value might be null
+			thread = new LogThread(fileName);
+			threads.put(fileName, thread); //put a value in that key
+		}
+		
+		return thread;
 	}
 	
 	/*Checks whether a client is registered or not.*/
