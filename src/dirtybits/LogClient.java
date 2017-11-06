@@ -17,7 +17,7 @@ public class LogClient {
 
 	public boolean sendLog(String message, LogLevel level, Date date) {
 		if(this.isRegistered) {
-			LogMessage msg = new LogMessage(level, message, this.clientName, date);
+			LogMessage msg = new LogMessage(level, message, this, date);
 			server.registerLog(this, msg);
 			return true;
 		} else {
