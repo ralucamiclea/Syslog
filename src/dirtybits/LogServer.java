@@ -32,8 +32,8 @@ public class LogServer {
 		return true;
 	}
 	
-	public void registerLog(LogMessage log) {
-		//TODO
+	public void registerLog(LogClient client, LogMessage log) {
+		
 	}
 	
 	private LogThread getThreadFor(String fileName){
