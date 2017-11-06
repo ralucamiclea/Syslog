@@ -12,11 +12,11 @@ public class LogServerConfig {
 	private int maxClients;
 	private String directoryPath;
 
-	public LogServerConfig() {
+	private LogServerConfig() {
 		this.includeLevel = true;
 		this.includeClientName = false;
 		this.maxClients = 10;
-		this.directoryPath = "C:/sdfsd/sdfdsf";
+		this.directoryPath = "../logs";
 		this.readConfigFile();
 	}
 

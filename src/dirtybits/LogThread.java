@@ -17,7 +17,7 @@ public class LogThread implements Runnable {
     private LogServerConfig config;
 
     public LogThread() {
-        this.config = new LogServerConfig();
+        this.config = LogServerConfig.getConfig();
     }
 
     public LogThread(String fileName) {
@@ -25,8 +25,8 @@ public class LogThread implements Runnable {
         this.fileName = fileName;
     }
 
-    private void writeMessageToFile(LogMessage log) {
-        checkAndCreateWritter();
+    private void writeMessageToFile(LogMessage log) throws IOException {
+        checkAndCreateWriter();
 
         String logLine = "[" + log.getDate() + "]" + "[" + log.getClient() + "]" + "[" + log.getLevel() + "]" + log.getMessage();
         writer.println(logLine);
@@ -54,7 +54,12 @@ public class LogThread implements Runnable {
             if (log == null) {
                 continue;
             }
-            this.writeMessageToFile(log);
+            try {
+                this.writeMessageToFile(log);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
         }
     }
 
@@ -76,7 +81,7 @@ public class LogThread implements Runnable {
     }
 
 
-    private void checkAndCreateWritter() {
+    private void checkAndCreateWriter() throws IOException {
         if (this.writer != null) {
             return;
         }
@@ -88,6 +93,7 @@ public class LogThread implements Runnable {
             this.writer = new PrintWriter(bw);
         } catch (IOException e) {
             System.out.println("Couldn't open file for write: " + filePath);
+            throw e;
         }
     }
 }
