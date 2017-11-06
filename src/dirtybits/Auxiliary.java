@@ -6,8 +6,8 @@ import java.io.UnsupportedEncodingException;
 
 public class Auxiliary {
 	
+	//Creates log fileNames according to the config file
 	public static String formatFileName(LogServerConfig config, String numeClient, String numeLevel) throws IOException, UnsupportedEncodingException{
-		//TODO: create log files according to the config file
 				String fileName = null;
 		
 		if(config.isIncludeClientName() && config.isIncludeLevel()) {
