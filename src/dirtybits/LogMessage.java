@@ -19,33 +19,15 @@ public class LogMessage {
 		return level;
 	}
 
-	public void setLevel(LogLevel level) {
-		this.level = level;
-	}
-
 	public String getMessage() {
 		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	public LogClient getClient() {
 		return client;
 	}
 
-	public void setClient(LogClient client) {
-		this.client = client;
-	}
-
 	public Date getDate() {
 		return date;
 	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	
-	
 }
