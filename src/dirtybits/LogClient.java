@@ -40,5 +40,7 @@ public class LogClient {
 		return isRegistered;
 	}
 
-	
+	public String getName() {
+		return this.clientName;
+	}
 }
