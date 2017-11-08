@@ -22,7 +22,7 @@ public class Auxiliary {
 					fileName = numeLevel;
 				}
 		
-		return fileName;
+		return fileName + ".txt";
 	}
 	
 	public static String getFileName(LogServerConfig config, LogMessage log) throws UnsupportedEncodingException, IOException {

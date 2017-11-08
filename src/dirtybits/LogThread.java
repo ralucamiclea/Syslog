@@ -1,6 +1,7 @@
 package dirtybits;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,6 +31,7 @@ public class LogThread implements Runnable {
 
         String logLine = "[" + log.getDate() + "]" + "[" + log.getClient() + "]" + "[" + log.getLevel() + "]" + log.getMessage();
         writer.println(logLine);
+        writer.flush();
     }
 
     public void enqueueMessage(LogMessage log) {
@@ -85,10 +87,12 @@ public class LogThread implements Runnable {
         if (this.writer != null) {
             return;
         }
-        String filePath = config.getDirectoryPath() + "/" + fileName;
+        String filePath = System.getProperty("user.dir") + "\\" + config.getDirectoryPath() + "\\" + fileName;
         System.out.println("Writing to file: " + filePath);
         try {
-            FileWriter fw = new FileWriter(filePath, true);
+        	File file = new File(filePath);
+        	file.getParentFile().mkdirs();
+        	FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
             this.writer = new PrintWriter(bw);
         } catch (IOException e) {

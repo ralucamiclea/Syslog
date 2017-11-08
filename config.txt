@@ -1,4 +1,4 @@
 includeLevel=true
 includeClientName=false
 maxClients=10
-directoryPath=../logs
+directoryPath=logs

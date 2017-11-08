@@ -13,10 +13,6 @@ public class LogServerConfig {
 	private String directoryPath;
 
 	private LogServerConfig() {
-		this.includeLevel = true;
-		this.includeClientName = false;
-		this.maxClients = 10;
-		this.directoryPath = "../logs";
 		this.readConfigFile();
 	}
 
