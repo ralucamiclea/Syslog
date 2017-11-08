@@ -87,7 +87,8 @@ public class LogThread implements Runnable {
         if (this.writer != null) {
             return;
         }
-        String filePath = System.getProperty("user.dir") + "\\" + config.getDirectoryPath() + "\\" + fileName;
+        //String filePath = System.getProperty("user.dir") + "\\" + config.getDirectoryPath() + "\\" + fileName;
+        String filePath = config.getDirectoryPath() + "/" + fileName;
         System.out.println("Writing to file: " + filePath);
         try {
         	File file = new File(filePath);
