@@ -16,6 +16,8 @@ public class LogThread implements Runnable {
     private PrintWriter writer;
     private String fileName;
     private LogServerConfig config;
+    private boolean running;
+    private boolean somethingToFlush = false;
 
     public LogThread() {
         this.config = LogServerConfig.getConfig();
@@ -31,24 +33,32 @@ public class LogThread implements Runnable {
 
         String logLine = "[" + log.getDate() + "]" + "[" + log.getClient() + "]" + "[" + log.getLevel() + "]" + log.getMessage();
         writer.println(logLine);
-        writer.flush();
+        somethingToFlush = true;
     }
 
     public void enqueueMessage(LogMessage log) {
-        System.out.println("[LogThread][enqueueMessage]:" + log.getMessage());
-        messageQueue.add(log);
+//        System.out.println("[LogThread][enqueueMessage]:" + log.getMessage());
+        if (this.messageQueue != null) {
+            messageQueue.add(log);
+        }
     }
 
     public void run() {
-        System.out.println("[LogThread][run]");
-        while (true) {
-            System.out.println("[LogThread][run][while]");
+        long threadId = Thread.currentThread().getId();
+        System.out.println("[LogThread][start][" + threadId + "]");
+        this.running = true;
+        while (running) {
+//            System.out.println("[LogThread][while][" + threadId + "]");
             if (messageQueue.isEmpty()) {
+                if(somethingToFlush) {
+                    somethingToFlush = false;
+                    writer.flush();
+                }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(200);
                 } catch (InterruptedException exc) {
-                    System.out.println("InterruptedException thrown when Thread.sleep.");
-                    return;
+                    System.out.println("InterruptedException thrown while Thread.sleep.");
+                    break;
                 }
                 continue;
             }
@@ -63,14 +73,18 @@ public class LogThread implements Runnable {
                 return;
             }
         }
+        running = false;
+        System.out.println("[LogThread][stop][" + threadId + "]");
     }
 
     public void start() {
         this.thread = (new Thread(this));
+        this.thread.setName("Thread for: " + this.fileName);
         this.thread.start();
     }
 
     public void stop() {
+        this.running = false;
         if (this.writer != null) {
             this.writer.flush();
             this.writer.close();
@@ -80,6 +94,7 @@ public class LogThread implements Runnable {
             this.thread.interrupt();
             this.thread = null;
         }
+        this.messageQueue = null;
     }
 
 
@@ -87,13 +102,12 @@ public class LogThread implements Runnable {
         if (this.writer != null) {
             return;
         }
-        //String filePath = System.getProperty("user.dir") + "\\" + config.getDirectoryPath() + "\\" + fileName;
         String filePath = config.getDirectoryPath() + "/" + fileName;
         System.out.println("Writing to file: " + filePath);
         try {
-        	File file = new File(filePath);
-        	file.getParentFile().mkdirs();
-        	FileWriter fw = new FileWriter(file);
+            File file = new File(filePath);
+            file.getParentFile().mkdirs();
+            FileWriter fw = new FileWriter(file, true);
             BufferedWriter bw = new BufferedWriter(fw);
             this.writer = new PrintWriter(bw);
         } catch (IOException e) {
