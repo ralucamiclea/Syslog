@@ -3,11 +3,11 @@ package dirtybits;
 import java.util.Date;
 
 public class LogClient {
-	
+
 	private String clientName;
 	private LogServer server;
 	private boolean isRegistered;
-	
+
 	public LogClient(String name, LogServer server) {
 		this.clientName = name;
 		this.server = server;
@@ -15,8 +15,8 @@ public class LogClient {
 		this.register();
 	}
 
-	public boolean sendLog(String message, LogLevel level, Date date) {
-		if(this.isRegistered) {
+	public synchronized boolean sendLog(String message, LogLevel level, Date date) {
+		if (this.isRegistered) {
 			LogMessage msg = new LogMessage(level, message, this.clientName, date);
 			server.registerLog(this, msg);
 			return true;
@@ -25,13 +25,14 @@ public class LogClient {
 			return false;
 		}
 	}
-	
+
 	private boolean register() {
 		if (server.registerClient(this)) {
 			this.isRegistered = true;
 			return true;
 		} else {
-			System.out.println("Client was not registered on server.");
+			long threadNr = Thread.currentThread().getId();
+			System.out.println("Client was not registered on server.(thread " + threadNr + ")");
 			return false;
 		}
 	}
