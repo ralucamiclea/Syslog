@@ -1,4 +1,5 @@
 includeLevel=true
 includeClientName=false
 maxClients=20
+maxEntries=10
 directoryPath=../logs

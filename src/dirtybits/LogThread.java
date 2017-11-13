@@ -12,6 +12,7 @@ public class LogThread implements Runnable {
 	private LogServerConfig config;
 	private boolean running;
 	private boolean somethingToFlush = false;
+	private int lineCounter, fileCounter;
 
 	public LogThread() {
 		this.config = LogServerConfig.getConfig();
@@ -23,15 +24,23 @@ public class LogThread implements Runnable {
 	}
 
 	private void writeMessageToFile(LogMessage log) throws IOException {
+		if(this.lineCounter == config.getMaxEntries()){
+			this.fileCounter++;
+			this.lineCounter = 0;
+			this.writer.flush();
+			this.writer.close();
+			this.writer = null;
+		}
 		checkAndCreateWriter();
-
-		String logLine = "[" + log.getDate() + "]" + "[" + log.getClient() + "]" + "[" + log.getLevel() + "]" + log.getMessage();
+		
+		String logLine = "[Line #" + lineCounter + "]" + "[" + log.getDate() + "]" + "[" + log.getClient() + "]" + "[" + log.getLevel() + "]" + log.getMessage();
+		this.lineCounter++;
+		
 		writer.println(logLine);
 		somethingToFlush = true;
 	}
 
 	public void enqueueMessage(LogMessage log) {
-//        System.out.println("[LogThread][enqueueMessage]:" + log.getMessage());
 		if (this.messageQueue != null) {
 			messageQueue.add(log);
 		}
@@ -42,7 +51,6 @@ public class LogThread implements Runnable {
 		System.out.println("[LogThread][start][" + threadId + "]");
 		this.running = true;
 		while (running) {
-//            System.out.println("[LogThread][while][" + threadId + "]");
 			if (messageQueue.isEmpty()) {
 				if (somethingToFlush) {
 					somethingToFlush = false;
@@ -96,7 +104,8 @@ public class LogThread implements Runnable {
 		if (this.writer != null) {
 			return;
 		}
-		String filePath = config.getDirectoryPath() + "/" + fileName;
+		
+		String filePath = config.getDirectoryPath() + "/" + fileCounter + fileName;
 		System.out.println("Writing to file: " + filePath);
 		try {
 			File file = new File(filePath);

@@ -61,6 +61,7 @@ public class LogServer {
 			return false;
 		}
 		if (!clientExists(client)) {
+			System.out.println("[LogServer][registerLog] client '" + client.getName() + "' not registered");
 			return false; //client does not exist
 		}
 

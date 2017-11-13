@@ -15,7 +15,7 @@ public class Main {
 
 		for (int i = 0; i < 20; ++i) {
 			int clientNr = i / 2 + 1;
-			LogClientThread clientThread = new LogClientThread(server, "client #" + clientNr, 2, 5000);
+			LogClientThread clientThread = new LogClientThread(server, "client #" + clientNr, 2, 100);
 			clientThread.start();
 			clients.add(clientThread);
 		}
@@ -28,5 +28,6 @@ public class Main {
 		clients.forEach(LogClientThread::stop);
 
 		System.out.println("main thread done...");
+		scanner.close();
 	}
 }

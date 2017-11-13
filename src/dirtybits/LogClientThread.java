@@ -39,11 +39,11 @@ public class LogClientThread implements Runnable {
 	public void run() {
 		long threadId = Thread.currentThread().getId();
 		System.out.println("[LogClientThread][start][" + threadId + "]");
-		long threadNumber = Thread.currentThread().getId();
+	
 		LogClient client = new LogClient(clientName, server);
 		running = true;
 		while (number-- > 0 && running) {
-			String message = "Log from thread: #" + threadNumber + "  <<";
+			String message = "Log from thread: #" + threadId + "  <<";
 			LogLevel level = LogLevel.values()[random.nextInt(5)];
 			client.sendLog(message, level, new Date());
 			try {
