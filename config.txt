@@ -1,5 +1,5 @@
-includeLevel=true
+includeLevel=false
 includeClientName=false
-maxClients=20
-maxEntries=10
+maxClients=40
+maxLogFileSize=10000
 directoryPath=../logs

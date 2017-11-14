@@ -3,29 +3,30 @@ package dirtybits;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Auxiliary {
 
 	//Creates log fileNames according to the config file
-	public static String formatFileName(LogServerConfig config, String numeClient, String numeLevel) throws IOException, UnsupportedEncodingException {
-		String fileName = null;
+	public static String formatFileName(LogServerConfig config, String clientName, String level) throws IOException, UnsupportedEncodingException {
+		String fileName = "file";
 
-		if (config.isIncludeClientName() && config.isIncludeLevel()) {
-			fileName = numeClient + "." + numeLevel;
-		} else if (config.isIncludeClientName() && !config.isIncludeLevel()) {
-			fileName = numeClient;
-		} else if (!config.isIncludeClientName() && config.isIncludeLevel()) {
-			fileName = numeLevel;
+		if (config.isIncludeClientName()) {
+			fileName += "-" + clientName;
+		}
+		if (config.isIncludeLevel()) {
+			fileName += "-" + level;
 		}
 
-		return fileName + ".txt";
+		return fileName;
 	}
 
 	public static String getFileName(LogServerConfig config, LogMessage log) throws UnsupportedEncodingException, IOException {
-		String numeClient = log.getClient();
-		String numeLevel = log.getLevel().toString();
-		return formatFileName(config, numeClient, numeLevel);
+		String clientName = log.getClient();
+		String level = log.getLevel().toString();
+		return formatFileName(config, clientName, level);
 	}
 
 	public static boolean createDirectoryIfNotExists(String pathStr) {
@@ -34,5 +35,24 @@ public class Auxiliary {
 			return file.mkdirs();
 		}
 		return true;
+	}
+
+	public static boolean tryParseInt(String value) {
+		try {
+			Integer.parseInt(value);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	public static int getMatchedNumber(String fileName, Pattern pattern) {
+		Matcher matcher = pattern.matcher(fileName);
+		matcher.matches();
+		String lastNr = matcher.group(1);
+		if (Auxiliary.tryParseInt(lastNr)) {
+			return Integer.parseInt(lastNr);
+		}
+		return 0;
 	}
 }

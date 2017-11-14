@@ -10,7 +10,7 @@ public class LogServerConfig {
 	private boolean includeLevel;
 	private boolean includeClientName;
 	private int maxClients;
-	private int maxEntries;
+	private int maxLogFileSize;
 	private String directoryPath;
 
 	private LogServerConfig() {
@@ -27,9 +27,9 @@ public class LogServerConfig {
 	public int getMaxClients() {
 		return maxClients;
 	}
-	
-	public int getMaxEntries() {
-		return maxEntries;
+
+	public int getMaxLogFileSize() {
+		return maxLogFileSize;
 	}
 
 	public boolean isIncludeClientName() {
@@ -62,8 +62,8 @@ public class LogServerConfig {
 						this.maxClients = Integer.parseInt(array[1]);
 						break;
 					}
-					case "maxEntries": {
-						this.maxEntries = Integer.parseInt(array[1]);
+					case "maxLogFileSize": {
+						this.maxLogFileSize = Integer.parseInt(array[1]);
 						break;
 					}
 					case "directoryPath": {
@@ -83,10 +83,13 @@ public class LogServerConfig {
 
 	@Override
 	public String toString() {
-		return "LogServerConfig [includeLevel=" + includeLevel
+		return "LogServerConfig ["
+				+ "includeLevel=" + includeLevel
 				+ ", includeClientName=" + includeClientName
 				+ ", maxClients=" + maxClients
-				+ ", directoryPath=" + directoryPath + "]";
+				+ ", directoryPath=" + directoryPath
+				+ ", maxLogFileSize=" + maxLogFileSize
+				+ "]";
 	}
 
 
